@@ -6,6 +6,7 @@
 			}).done(function( data ) {
 				var table = $('#example').DataTable({
 					 "data": data,
+					 paging: false,
 					 select:false,
 					 "columns": [
 						 {
