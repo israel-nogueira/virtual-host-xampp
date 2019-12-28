@@ -18,7 +18,7 @@ Normalmente esse arquivo fica em **C:\Windows\System32\drivers\etc**
      
 | Acesse "propriedades" no arquivo "host" | Libere permissões aos usuários |
 |--|--|
-| ![enter image description here](https://github.com/agencia-feats/virtual-host-XAMPP/blob/master/vhosts/permissao_01.png?raw=true) | ![enter image description here](https://github.com/agencia-feats/virtual-host-XAMPP/blob/master/vhosts/permissao_02.png?raw=true) |
+| ![enter image description here](https://github.com/agencia-feats/virtual-host-XAMPP/blob/master/screenshot/permissao_01.png?raw=true) | ![enter image description here](https://github.com/agencia-feats/virtual-host-XAMPP/blob/master/screenshot/permissao_02.png?raw=true) |
 
 # APROVEITE!
 
