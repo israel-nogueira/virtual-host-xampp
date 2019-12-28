@@ -5,6 +5,21 @@ class globals {
 	public static function rootPath() {
 		return realpath(__DIR__.'/../../');
 	}
+	public static function getDashboardPermition() {
+		$filename = globals::get_hostsfile_dir().'\hosts';
+		if (!is_writable($filename)) {
+		    echo '<div class="alert alert-danger" role="alert">
+					  O arquivo <b>'.$filename.'</b> não tem permissão de acesso!
+					</div>';
+		} 
+		$filename = globals::rootPath() . '/apache/conf/extra/httpd-vhosts.conf';
+		if (!is_writable($filename)) {
+		    echo '<div class="alert alert-danger" role="alert">
+					  O arquivo <b>'.$filename.'</b> não tem permissão de acesso!
+					</div>';
+		} 
+
+	}
 	public static function returnTemplateVHost($_NEWHOST) {
 		return 	'<VirtualHost ' . $_NEWHOST['domain'] . '>' . PHP_EOL .
 				'	ServerAdmin 	webmaster@' . $_NEWHOST['domain'] . PHP_EOL .
