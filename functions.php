@@ -1,5 +1,6 @@
 <?
 include('./config.php');
+
 if($_POST['funcao']=='globals::returnVhosts'){
 	header('Content-Type: application/json');
 	echo json_encode(globals::exec($_POST['funcao']),JSON_PRETTY_PRINT);

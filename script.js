@@ -17,7 +17,14 @@
 							 "render": function () { },
 							 width:"15px"
 						 },
-						 { "data": "domain" },
+
+						 { "data": "domain", "name": "domain",
+						        fnCreatedCell: function (nTd, sData, oData, iRow, iCol) {
+						            $(nTd).html("<a href='http://"+oData.domain+"' target='_blank'>"+oData.domain+"</a>");
+						        }
+						    }
+
+
 					 ],
 					 "order": [[1, 'asc']]
 				 });
