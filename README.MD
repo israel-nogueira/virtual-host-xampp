@@ -1,3 +1,4 @@
+
 # Editor virtualHost para XAMPP (Windows)
 
 Devido a uma necessidade, eu desenvolvi um gerenciador para virtualHosts no XAMPP.
@@ -22,12 +23,13 @@ Normalmente esse arquivo fica em **C:\Windows\System32\drivers\etc**
 # APROVEITE!
 
 
-![enter image description here](https://github.com/agencia-feats/virtual-host-XAMPP/blob/master/screenshot/Screenshot_1.png?raw=true)
+![enter image description here](https://github.com/agencia-feats/virtual-host-XAMPP/blob/master/screenshot/Screenshot_1.png?raw=true&v=2)
 
+### Adicione um novo host clicando no botão 
 ![enter image description here](https://github.com/agencia-feats/virtual-host-XAMPP/blob/master/screenshot/Screenshot_2.png?raw=true)
 
-![enter image description here](https://github.com/agencia-feats/virtual-host-XAMPP/blob/master/screenshot/Screenshot_3.png?raw=true)
+![enter image description here](https://github.com/agencia-feats/virtual-host-XAMPP/blob/master/screenshot/Screenshot_3.png?raw=true&v=2)
 
-![enter image description here](https://github.com/agencia-feats/virtual-host-XAMPP/blob/master/screenshot/Screenshot_4.png?raw=true)
+![enter image description here](https://github.com/agencia-feats/virtual-host-XAMPP/blob/master/screenshot/Screenshot_4.png?raw=true&v=2)
 
 ![enter image description here](https://github.com/agencia-feats/virtual-host-XAMPP/blob/master/screenshot/Screenshot_5.png?raw=true)
