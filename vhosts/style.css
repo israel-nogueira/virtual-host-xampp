@@ -12,5 +12,8 @@ tr.shown td.details-control {
 	background: url('./details_close.png') no-repeat center center;
 }
 .adicionar-dominio{
-	position: absolute; left: 50%; transform: translateX(-50%); top: 20px;z-index: 1;
+	position: relative;
+	left: 30px;
+	margin-bottom: -100px;
+	z-index: 1;
 }

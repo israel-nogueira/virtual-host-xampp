@@ -1,3 +1,7 @@
+<? include('./config.php'); ?>
+
+
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,7 +12,7 @@
 	<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
 	<link href="https://fonts.googleapis.com/css?family=Work+Sans&display=swap" rel="stylesheet">
 	<link href="./bootstrap-4.4.1-dist/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
-	<link href="./style.css" rel="stylesheet" type="text/css" />
+	<link href="./style.css?v=<?=rand(1,99999999999)?>" rel="stylesheet" type="text/css" />
 	
 	<script src="https://code.jquery.com/jquery-3.1.0.js"></script>
 	<script src="https://cdn.datatables.net/1.10.13/js/jquery.dataTables.js"></script>
@@ -17,6 +21,14 @@
 	<script src="./script.js?v=<?=rand(1,99999999999)?>" type="text/javascript"></script>
 </head>
 <body>
+<?
+$filename = globals::get_hostsfile_dir().'\hosts';
+if (!is_writable($filename)) {
+    echo '<div class="alert alert-danger" role="alert">
+			  O arquivo <b>'.$filename.'</b> não tem permissão de acesso!
+			</div>';
+} 
+?>
 
 
 <!-- Botão para acionar modal -->
