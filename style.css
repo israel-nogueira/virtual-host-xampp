@@ -1,0 +1,16 @@
+*{
+	font-family: 'Work Sans', sans-serif;
+}
+.dataTables_wrapper {
+	margin: 30px;
+}
+td.details-control {
+	background: url('./details_open.png') no-repeat center center;
+	cursor: pointer;
+}
+tr.shown td.details-control {
+	background: url('./details_close.png') no-repeat center center;
+}
+.adicionar-dominio{
+	position: absolute; left: 50%; transform: translateX(-50%); top: 20px;z-index: 1;
+}
