@@ -21,8 +21,9 @@ Normalmente esse arquivo fica em **C:\Windows\System32\drivers\etc**
 
 # APROVEITE!
 
-![enter image description here](https://github.com/agencia-feats/virtual-host-XAMPP/blob/master/vhosts/Screenshot_1.png?raw=true)
 
-![enter image description here](https://github.com/agencia-feats/virtual-host-XAMPP/blob/master/vhosts/Screenshot_2.png?raw=true)
+![enter image description here](https://github.com/agencia-feats/virtual-host-XAMPP/blob/master/screenshot/Screenshot_1.png?raw=true)
 
-![enter image description here](https://github.com/agencia-feats/virtual-host-XAMPP/blob/master/vhosts/Screenshot_3.png?raw=true)
+![enter image description here](https://github.com/agencia-feats/virtual-host-XAMPP/blob/master/screenshot/Screenshot_2.png?raw=true)
+
+![enter image description here](https://github.com/agencia-feats/virtual-host-XAMPP/blob/master/screenshot/Screenshot_3.png?raw=true)
