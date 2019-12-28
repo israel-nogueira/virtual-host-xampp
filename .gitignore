@@ -1,4 +1,5 @@
-/vhosts/Screenshot_1.png
-/vhosts/Screenshot_2.png
-/vhosts/Screenshot_3.png
-/vhosts/Screenshot_4.png
+!.gitignore
+!vhosts/Screenshot_1.png
+!vhosts/Screenshot_2.png
+!vhosts/Screenshot_3.png
+!vhosts/Screenshot_4.png
