@@ -131,6 +131,40 @@ Require all granted</textarea>
   </div>
 </div>
 
+<div class="modal fade" id="alertaDiretorio" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+	<div class="modal-content">
+	  <div class="modal-header">
+		<h5 class="modal-title">Path inexistente</h5>
+	  </div>
+	  <div class="modal-body">
+		O Path que você digitou não existe.<br> 
+		Isso impedirá o APACHE de iniciar corretamente.<br>
+		Diretório: <span class="domain"></span>
+	  </div>
+	  <div class="modal-footer">
+		<button type="button" 		class="entendi btn btn-info" data-dismiss="modal">Ok, entendi</button>
+	  </div>
+	</div>
+  </div>
+</div>
+<div class="modal fade" id="parabensCriado" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+	<div class="modal-content">
+	  <div class="modal-header">
+		<h5 class="modal-title">Sucesso!</h5>
+	  </div>
+	  <div class="modal-body">
+		O dominio <span class="domain"></span> foi registrado com sucesso em seu vhost.conf <br>
+		Reinicie seu apache para que seu dominio funcione corretamente
+
+	  </div>
+	  <div class="modal-footer">
+		<button type="button" 		class="entendi btn btn-info" data-dismiss="modal">Ok, entendi</button>
+	  </div>
+	</div>
+  </div>
+</div>
 
 
 

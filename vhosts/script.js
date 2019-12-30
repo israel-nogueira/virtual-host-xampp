@@ -152,9 +152,21 @@ $(document).on('click','.adicionar-dominio',function (e) {
 				 			'permissions':modal.find('textarea[name="permissoes"]').val()
 				 		}
 				 	}).done(function( data ) {
-		 				window.location.reload();
+				 		if(data==true){
+				 			$('#parabensCriado').find('span.domain').html('<b>'+modal.find('input[name="dominio"]').val()+'</b>');
+				 			$('#parabensCriado').find('.entendi').click(function(){$('#parabensCriado').modal('hide');});
+				 			$('#parabensCriado').modal('show');
+				 			$('#adicionarDominio').modal('hide');
+				 		}else{
+				 			$('#alertaDiretorio').find('span.domain').html('<b>'+modal.find('input[name="diretorio"]').val()+'</b>');
+				 			$('#alertaDiretorio').find('.entendi').click(function(){
+				 					$('#adicionarDominio').modal('show')
+				 					$('#alertaDiretorio').modal('hide');
+				 			});
+				 			$('#alertaDiretorio').modal('show');
+				 			$('#adicionarDominio').modal('hide');
+				 		}
 				 	})
-				 	modal.modal('hide');
 			})
 	}).one('hidden.bs.modal', function(e) {}).modal('show');
 })

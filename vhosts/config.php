@@ -75,7 +75,6 @@ class globals {
 		file_put_contents(globals::get_hostsfile_dir() . '\hosts', implode($_HOST_WINDOW, PHP_EOL));
 		file_put_contents(globals::rootPath() . '/apache/conf/extra/httpd-vhosts.conf', $_VHOSTS_FINIT);
 	}
-
 	public static function addHost() {
 		$_POST['type'] = 'vhosts';
 		$_VHOSTS = globals::returnVhosts();
@@ -96,8 +95,13 @@ class globals {
 		foreach ($_VHOSTS as $value) {
 			$_HOST_WINDOW[] = globals::ip_local . '	' . $value['domain'];
 		};
-		file_put_contents(globals::get_hostsfile_dir() . '\hosts', implode($_HOST_WINDOW, PHP_EOL));
-		file_put_contents(globals::rootPath() . '/apache/conf/extra/httpd-vhosts.conf', $_VHOSTS_FINIT);
+		if(!file_exists($_PATH)){
+			die(false);
+		}else{
+			file_put_contents(globals::get_hostsfile_dir() . '\hosts', implode($_HOST_WINDOW, PHP_EOL));
+			file_put_contents(globals::rootPath() . '/apache/conf/extra/httpd-vhosts.conf', $_VHOSTS_FINIT);
+			die(true);
+		}
 	}
 
 	public static function returnVhosts() {
