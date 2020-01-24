@@ -1,4 +1,9 @@
-<? include('./config.php'); ?>
+<? include('./config.php');
+
+echo globals::getVhosts();
+exit;
+
+ ?>
 
 
 

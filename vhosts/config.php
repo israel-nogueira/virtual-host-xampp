@@ -2,8 +2,19 @@
 
 class globals {
 	const ip_local = '127.0.0.1';
+	$vhosts_conf	= null;
+
+
+	public function __construct() {
+			$this->vhosts_conf ='/apache/conf/extra/httpd-vhosts.conf';
+	}
+
+
 	public static function rootPath() {
 		return realpath(__DIR__.'/../../');
+	}
+	public static function getVhosts() {
+		return globals::rootPath() . $this->vhosts_conf;
 	}
 	public static function getDashboardPermition() {
 		$filename = globals::get_hostsfile_dir().'\hosts';
@@ -12,7 +23,7 @@ class globals {
 					  O arquivo <b>'.$filename.'</b> não tem permissão de acesso!
 					</div>';
 		} 
-		$filename = globals::rootPath() . '/apache/conf/extra/httpd-vhosts.conf';
+		$filename = globals::getVhosts();
 		if (!is_writable($filename)) {
 		    echo '<div class="alert alert-danger" role="alert">
 					  O arquivo <b>'.$filename.'</b> não tem permissão de acesso!
@@ -48,7 +59,7 @@ class globals {
 			$_HOST_WINDOW[] = globals::ip_local . '	' . $value['domain'];
 		};
 		file_put_contents(globals::get_hostsfile_dir() . '\hosts', implode($_HOST_WINDOW, PHP_EOL));
-		file_put_contents(globals::rootPath() . '/apache/conf/extra/httpd-vhosts.conf', $_VHOSTS_FINIT);
+		file_put_contents(globals::getVhosts(), $_VHOSTS_FINIT);
 	}
 	public static function salvarHost() {
 		$_POST['type'] = 'vhosts';
@@ -73,7 +84,7 @@ class globals {
 			$_HOST_WINDOW[] = globals::ip_local . '	' . $value['domain'];
 		};
 		file_put_contents(globals::get_hostsfile_dir() . '\hosts', implode($_HOST_WINDOW, PHP_EOL));
-		file_put_contents(globals::rootPath() . '/apache/conf/extra/httpd-vhosts.conf', $_VHOSTS_FINIT);
+		file_put_contents(globals::getVhosts(), $_VHOSTS_FINIT);
 	}
 	public static function addHost() {
 		$_POST['type'] = 'vhosts';
@@ -99,13 +110,13 @@ class globals {
 			die(false);
 		}else{
 			file_put_contents(globals::get_hostsfile_dir() . '\hosts', implode($_HOST_WINDOW, PHP_EOL));
-			file_put_contents(globals::rootPath() . '/apache/conf/extra/httpd-vhosts.conf', $_VHOSTS_FINIT);
+			file_put_contents(globals::getVhosts(), $_VHOSTS_FINIT);
 			die(true);
 		}
 	}
 
 	public static function returnVhosts() {
-		$vhosts_content = @file_get_contents(globals::rootPath() . '/apache/conf/extra/httpd-vhosts.conf');
+		$vhosts_content = @file_get_contents(globals::getVhosts());
 		if ($_POST['type'] == 'vhosts') {
 			$matches = array();
 			$_RETURN_ARRAY = array();
