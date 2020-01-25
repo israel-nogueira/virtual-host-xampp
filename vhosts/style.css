@@ -17,3 +17,39 @@ tr.shown td.details-control {
 	margin-bottom: -100px;
 	z-index: 1;
 }
+.inputVars input[type="text"] {
+    width: calc(50% - 2px);
+    margin: 1px;
+    border: solid 1px #CCC;
+    padding: 2px 0px;
+    width: calc(50% - 41px);
+	float: left;
+
+}
+.inputVars .addVar{
+	display: none;
+}
+.inputVars .exclVar{
+	padding: 1px 20px;
+	margin: 2px 5px;
+}
+.inputVars:last-child .exclVar{
+	display: none;
+}
+.inputVars:last-child .addVar{
+	display: block;
+	position: relative;
+	float: left;
+	background: #28a745;
+	color: #FFF;
+	padding: 1px 20px;
+	margin: 2px;
+}
+
+td.getEnvs {
+    font-size: 11px;
+}
+
+
+
+

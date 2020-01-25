@@ -2,20 +2,20 @@
 
 class globals {
 	const ip_local = '127.0.0.1';
-	$vhosts_conf	= null;
+	public function __construct(){}
 
-
-	public function __construct() {
-			$this->vhosts_conf ='/apache/conf/extra/httpd-vhosts.conf';
+	public function getVhosts() {
+		return realpath(__DIR__.'/../../').'/apache/conf/extra/httpd-vhosts.conf';
+	}
+	public function getJSONvHosts() {
+		return realpath(__DIR__).'/v-hosts.json';
+	}
+	public function createJSONvHosts() {
+		if(!file_exists(self::getJSONvHosts())){
+			file_put_contents(self::getJSONvHosts(), '[]');
+		}
 	}
 
-
-	public static function rootPath() {
-		return realpath(__DIR__.'/../../');
-	}
-	public static function getVhosts() {
-		return globals::rootPath() . $this->vhosts_conf;
-	}
 	public static function getDashboardPermition() {
 		$filename = globals::get_hostsfile_dir().'\hosts';
 		if (!is_writable($filename)) {
@@ -39,16 +39,15 @@ class globals {
 				'	ErrorLog 		"' . $_NEWHOST['diretorio'] . '/error.log"' . PHP_EOL .
 				'	CustomLog 		"' . $_NEWHOST['diretorio'] . '/access.log" common' . PHP_EOL .
 				'	<Directory 		"' . $_NEWHOST['diretorio'] . '">' . PHP_EOL .
-				implode(array_map(function ($opt) {
-					return "		" . trim($opt);
-				}, explode("\n", $_NEWHOST['permissions'])) , "\n") . PHP_EOL . 
+					implode(array_map(function ($opt) {return "		" .str_replace('\\','/',trim($opt));},$_NEWHOST['permissions']) , "\n") . PHP_EOL . 
+					implode(array_map(function ($opt) {return "		" . str_replace('\\','/',trim($opt));},$_NEWHOST['SetEnv']) , "\n") . PHP_EOL . 
 				'	</Directory>' . PHP_EOL . 
 				'</VirtualHost>' . PHP_EOL . PHP_EOL . PHP_EOL . PHP_EOL . PHP_EOL . PHP_EOL;
 	}
 	public static function deleteHost() {
-		$_POST['type'] = 'vhosts';
+		$_REQUEST['type'] = 'vhosts';
 		$_VHOSTS = globals::returnVhosts();
-		$_INDEX = $_POST['index'];
+		$_INDEX = $_REQUEST['index'];
 		unset($_VHOSTS[$_INDEX]);
 		$_VHOSTS_FINIT = array_map(function ($domain) {
 			return globals::returnTemplateVHost($domain);
@@ -62,23 +61,36 @@ class globals {
 		file_put_contents(globals::getVhosts(), $_VHOSTS_FINIT);
 	}
 	public static function salvarHost() {
-		$_POST['type'] = 'vhosts';
-		$_VHOSTS = globals::returnVhosts();
-		$_INDEX = $_POST['index'];
-		$_DOMAIN = $_POST['domain'];
-		$_PATH = $_POST['diretorio'];
-		$_OPTIONS = $_POST['permissions'];
+		$_REQUEST['type'] = 'vhosts';
+		$_VHOSTS 		= globals::returnVhosts();
+		$_INDEX 		= $_REQUEST['index'];
+		$_DOMAIN 		= $_REQUEST['domain'];
+		$_PATH 			= $_REQUEST['diretorio'];
+		$_PERMISSIONS 	= $_REQUEST['permissions'];
+		$_VARS 			= array(); 
+		foreach ($_REQUEST['SendVars'] as $key => $value) {
+
+			if(!is_numeric($value)){
+				$_VARS[] = 'SetEnv '.$key.' "'.$value.'"';
+			}else{
+				$_VARS[] = 'SetEnv '.$key.' '.$value;
+			}
+		}
+
 		$_NEWHOST = array(
 			"index" => $_INDEX,
 			"domain" => $_DOMAIN,
 			"diretorio" => $_PATH,
-			"permissions" => $_OPTIONS
+			"permissions" => $_PERMISSIONS,
+			"SetEnv" => $_VARS
 		);
+
+
 		$_VHOSTS[$_INDEX] = $_NEWHOST;
 		$_VHOSTS_FINIT = array_map(function ($domain) {
 			return globals::returnTemplateVHost($domain);
-		}
-		, $_VHOSTS);
+		}, $_VHOSTS);
+
 		$_HOST_WINDOW = array();
 		foreach ($_VHOSTS as $value) {
 			$_HOST_WINDOW[] = globals::ip_local . '	' . $value['domain'];
@@ -87,11 +99,11 @@ class globals {
 		file_put_contents(globals::getVhosts(), $_VHOSTS_FINIT);
 	}
 	public static function addHost() {
-		$_POST['type'] = 'vhosts';
+		$_REQUEST['type'] = 'vhosts';
 		$_VHOSTS = globals::returnVhosts();
-		$_DOMAIN = $_POST['domain'];
-		$_PATH = $_POST['diretorio'];
-		$_OPTIONS = $_POST['permissions'];
+		$_DOMAIN = $_REQUEST['domain'];
+		$_PATH = $_REQUEST['diretorio'];
+		$_OPTIONS = $_REQUEST['permissions'];
 		$_NEWHOST = array(
 			"domain" => $_DOMAIN,
 			"diretorio" => $_PATH,
@@ -117,7 +129,7 @@ class globals {
 
 	public static function returnVhosts() {
 		$vhosts_content = @file_get_contents(globals::getVhosts());
-		if ($_POST['type'] == 'vhosts') {
+		if ($_REQUEST['type'] == 'vhosts') {
 			$matches = array();
 			$_RETURN_ARRAY = array();
 			preg_match_all("'(#|)<VirtualHost(.*?)<\/VirtualHost>'si", $vhosts_content, $matches);
@@ -125,21 +137,45 @@ class globals {
 				preg_match("'DocumentRoot(.*?)\"(.*?)\"'si", $vhost, $documentroot);
 				preg_match("'ServerName (.*?)\n'si", $vhost, $servername);
 				preg_match_all("/<Directory(.*?)>(.*?)<\/Directory>/s", $vhost, $Directory);
-				$_OPTIONS = trim($Directory[2][0]);
-				$_PATH = trim($documentroot[2]);
-				$_DOMAIN = trim($servername[1]);
+				preg_match_all("'SetEnv(.*?)\n'si", $Directory[2][0], $_SETENV);
+				$_OPTIONS 	= trim($Directory[2][0]);
+				$_PATH 		= trim($documentroot[2]);
+				$_DOMAIN 	= trim($servername[1]);
+
+
+				$_OPTIONS 	= array_filter(array_map(function($value){
+								$value 	= trim($value);
+								if(substr($value,0,6) != 'SetEnv'){
+									return $value;
+								}else{
+									return null;
+								}
+							}, explode(PHP_EOL,$_OPTIONS)));
+
+
+				$_SET_VARS = array();
+				foreach ($_SETENV[1] as $_ENV) {
+						$_ENV		= str_replace(array("SetEnv","\r","\n","\t"),'', $_ENV);
+						$_ENV		= array_filter(explode(' ',$_ENV));
+						$KEY		= $_ENV[1];
+						$_VALUE		= array_slice($_ENV,1);
+						$_SET_VARS	= array_merge($_SET_VARS, array($KEY=>implode($_VALUE, ' ')));
+				}
+
+				
 				$_RETURN_ARRAY[] = array(
-					"index" => $key,
-					"domain" => $_DOMAIN,
-					"diretorio" => $_PATH,
-					"permissions" => $_OPTIONS
+					"index" 		=> $key,
+					"domain" 		=> $_DOMAIN,
+					"diretorio" 	=> $_PATH,
+					"permissions" 	=> $_OPTIONS,
+					"SetEnv" 		=> $_SET_VARS
 				);
 			}
 
 			return $_RETURN_ARRAY;
 		}
 
-		if ($_POST['type'] == 'servernames') {
+		if ($_REQUEST['type'] == 'servernames') {
 			$matches = array();
 			$servernames_array = array();
 			preg_match_all("'(#|)<VirtualHost(.*?)<\/VirtualHost>'si", $vhosts_content, $matches);
@@ -149,7 +185,7 @@ class globals {
 			}
 			return $servernames_array;
 		}
-		if ($_POST['type'] == 'file') return $vhosts_content;
+		if ($_REQUEST['type'] == 'file') return $vhosts_content;
 	}
 
 	public static function get_hostsfile_dir() {
@@ -236,4 +272,4 @@ class globals {
 	}
 
 }
-
+/**/

@@ -1,7 +1,5 @@
 <? include('./config.php');
 
-echo globals::getVhosts();
-exit;
 
  ?>
 
@@ -69,7 +67,7 @@ Require all granted</textarea>
 			</form>
 	  </div>
 	  <div class="modal-footer">
-		<button type="button" class="btn btn-success">Salvar alterações</button>
+		<button type="button" class="btn btn-success addDomain">Adicionar dominio</button>
 		<button type="button" class="btn btn-secondary" >Cancelar</button>
 	  </div>
 	</div>
@@ -126,10 +124,16 @@ Require all granted</textarea>
 					<label for="message-text" class="col-form-label">Permissões:</label>
 					<textarea class="form-control" name="permissoes" rows="6" ></textarea>
 				</div>
+				<div class="form-group">
+					<label for="message-text" class="col-form-label">Variáveis de ambiente:</label>
+					<div class="variaveis">
+						<div class="inputVars">	<input name="var" type="text"><input name="value" type="text"><button type="button" class="exclVar btn btn-warning">Del</button> <button type="button" class="addVar btn btn-success">Add</button></div>
+					</div>
+				</div>
 			</form>
 	  </div>
 	  <div class="modal-footer">
-		<button type="button" class="btn btn-success">Salvar alterações</button>
+		<button type="button" class="btn btn-success salvarAlteracoes">Salvar alterações</button>
 		<button type="button" class="btn btn-secondary" >Cancelar</button>
 	  </div>
 	</div>

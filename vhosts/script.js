@@ -48,7 +48,22 @@
 			});
 	 });
 
+	function returnInputsVariaveis(variavel,value){
+				return  `<div class="inputVars">
+							<input name="var" type="text" value='`+variavel+`'>
+							<input name="value" type="text" value='`+value+`'>
+							<button type="button" class="exclVar btn btn-warning">Del</button> 
+							<button type="button" class="addVar btn btn-success">Add</button>
+						</div>`;
+
+	}
+
 	function format(d){
+		
+		var setEnvs = '';
+		Object.entries(d.SetEnv).forEach(([key, value]) => {
+		    setEnvs += '<b>'+key + '</b> ' + value+'<br>';     
+		});
 		 return '<table cellpadding="0" cellspacing="0" border="0" style="width: 100%;">' +
 			 '<tr>' +
 				 '<td>Domínio:</td>' +
@@ -60,7 +75,11 @@
 			 '</tr>' +
 			 '<tr>' +
 				 '<td>Permissões:</td>' +
-				 `<td class="permissions">`+d.permissions.split("\n").join('<br>')+`</td>` +
+				 `<td class="permissions">`+d.permissions.join('<br>')+`</td>` +
+			 '</tr>'+
+			 '<tr>' +
+				 '<td>Variáveis de ambiente:</td>' +
+				 `<td class="getEnvs">`+setEnvs+`</td>` +
 			 '</tr>'+
 			 '<tr>' +
 				 `<td></td>` +
@@ -96,12 +115,26 @@ $(document).on('click','.deletar-dominio',function (e) {
 })
 
 
+$(document).on('click','#editarDominio .addVar',function (e) {
+	e.preventDefault();
+		var input = `<div class="inputVars"><input name="var" type="text"><input name="value" type="text"><button type="button" class="exclVar btn btn-warning">Del</button> <button type="button" class="addVar btn btn-success">Add</button></div>`;
+		$('#editarDominio .variaveis').append(input)
+	return false;
+})
+$(document).on('click','#editarDominio .exclVar',function (e) {
+	e.preventDefault();
+	$(this).parent().remove()
+	return false;
+})
+
+
 $(document).on('click','.editar-dominio',function (e) {
 	var tabelaElemento = $(this).parent().parent().parent();
 	var indexDomain 	= $(this).data('index');
 	var domain			= tabelaElemento.find('.domain').html();
 	var diretorio		= tabelaElemento.find('.diretorio').html();
 	var permissions		= tabelaElemento.find('.permissions').html().split('	').join('').split('<br>').join("\n");
+	var getEnvs			= tabelaElemento.find('.getEnvs').html().split('	').join('').split('<br>').join("\n");
 	$('#editarDominio').one('shown.bs.modal', function (e) {
 		var modal = $(this)
 		modal.find('.modal-title').html('Editar domínio <b>'+domain+'</b>');
@@ -109,9 +142,29 @@ $(document).on('click','.editar-dominio',function (e) {
 		modal.find('input[name="dominio"]').val(domain);
 		modal.find('input[name="diretorio"]').val(diretorio);
 		modal.find('textarea[name="permissoes"]').val(permissions);
+
+
+		var inputs = '';
+		getEnvs.split("\n").forEach(function(a,b){
+			var arrayVars 		= a.split(' ');
+			var stringTratada 	=arrayVars.splice(1,arrayVars.length).join(' ').replace(/"/g,"");
+			inputs 	+=returnInputsVariaveis(arrayVars[0].replace(/(<([^>]+)>)/ig,""), stringTratada)
+		})
+
+		modal.find('.variaveis').html(inputs);
 		modal.find('.btn-secondary').unbind('click').bind('click', function(e){ modal.modal('hide');})
-		modal.find('.btn-success').unbind('click').bind('click', function(e){
+		modal.find('.btn-success.salvarAlteracoes').unbind('click').bind('click', function(e){
 			e.preventDefault(); 
+
+			var SendVars = {}
+			$('.inputVars').each(function(a,b){
+				var variavel = $(b).find('input[name="var"]').val();
+				var value = $(b).find('input[name="value"]').val();
+				if(variavel!="" &&  value!=""){
+					SendVars[variavel] = value
+				}
+			})
+			console.log(SendVars)
 			$.ajax({
 				method: "POST",
 				url: "./functions.php",
@@ -120,14 +173,19 @@ $(document).on('click','.editar-dominio',function (e) {
 					'index':modal.find('input[name="index"]').val(),
 					'diretorio':modal.find('input[name="diretorio"]').val(),
 					'domain':modal.find('input[name="dominio"]').val(),
-					'permissions':modal.find('textarea[name="permissoes"]').val()
+					'permissions':modal.find('textarea[name="permissoes"]').val().split("\n"),
+					'SendVars':SendVars
 				}
 			}).done(function( data ) {
 				$($( "td:contains('"+domain+"')" )[0]).html(modal.find('input[name="dominio"]').val())
 				tabelaElemento.find('.domain').html(modal.find('input[name="dominio"]').val());
 				tabelaElemento.find('.diretorio').html(modal.find('input[name="diretorio"]').val());
 				tabelaElemento.find('.permissions').html(modal.find('textarea[name="permissoes"]').val().split("\n").join("<br>"))
-				console.log(modal.find('textarea[name="permissoes"]').val())
+				setEnvs = '';
+				Object.entries(SendVars).forEach(([key, value]) => {
+				    setEnvs += '<b>'+key + '</b> ' + value+'<br>';     
+				});
+				tabelaElemento.find('.getEnvs').html(setEnvs)
 			})
 			tabelaElemento.find('.domain').html(modal.find('input[name="dominio"]').val());
 			tabelaElemento.find('.diretorio').html(modal.find('input[name="diretorio"]').val());
@@ -141,7 +199,7 @@ $(document).on('click','.adicionar-dominio',function (e) {
 	$('#adicionarDominio').one('shown.bs.modal', function (e) {
 		var modal = $(this)	
 		 modal.find('.btn-secondary').unbind('click').bind('click', function(e){modal.modal('hide');})
-		 modal.find('.btn-success').unbind('click').bind('click', function(e){
+		 modal.find('.btn-success.addDomain').unbind('click').bind('click', function(e){
 				 	$.ajax({
 				 		method: "POST",
 				 		url: "./functions.php",
