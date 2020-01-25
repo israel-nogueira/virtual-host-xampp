@@ -95,6 +95,11 @@ class globals {
 		foreach ($_VHOSTS as $value) {
 			$_HOST_WINDOW[] = globals::ip_local . '	' . $value['domain'];
 		};
+
+		copy(globals::getVhosts(),__DIR__.'/V-Hsosts.bkp.'.date("Y-m-d__H-i-s") );
+		file_put_contents(__DIR__.'/httpd-vhosts.conf', $_VHOSTS_FINIT);
+
+
 		file_put_contents(globals::get_hostsfile_dir() . '\hosts', implode($_HOST_WINDOW, PHP_EOL));
 		file_put_contents(globals::getVhosts(), $_VHOSTS_FINIT);
 	}
